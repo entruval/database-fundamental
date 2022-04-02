@@ -1,0 +1,6 @@
+[how]
+  - always set TLS / SSL
+  - always isolate database
+  - strict user permission, less permission
+  
+

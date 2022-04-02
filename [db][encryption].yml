@@ -1,0 +1,12 @@
+# [what]
+#   - [homomorphic]
+#     - ability to perform arithmetic operation on encrypted datad
+#     - no need to decrypt
+#     - we can query an encrypted database
+#     - layer 7 reverse proxy (load balancer) don't have to terminate TLS
+#       - route traffic based on rules without decrypting traffic
+#     - databases can index and optimize without decrypting data
+
+
+
+

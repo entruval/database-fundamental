@@ -1,0 +1,35 @@
+[state when we do query]
+  - use explain analyze (for postgres)
+  - use explain (analyze, buffers) (for postgres)
+  [parallel seq scan]
+    - heap only search
+    - o(n)
+  [index scan]
+    - index search and heap search
+    - good
+  [index only scan]
+    - index search only
+    - best
+
+[tidy up structure]
+  - vacuum (option) table
+    - [options]
+      - verbose
+      - full
+      - freeze
+      - analyze
+    - to rewrites the entire contents of the table into a new disk with no extra spaces (removing dead rows), allowing unused space to be returned to the OS
+    - dead rows check is expensive
+
+[create index concurrently]
+  - postgres only
+  - create index oncurrently id_idx on users(id)
+  - higher cpu and memory usage
+  - have a chance to fail
+
+[force query to use specific index]
+  - /*+ INDEX[index_name] */
+    - SELECT * FROM table
+    - WHERE id = n
+    - /*+ INDEX[index_name] */;
+

@@ -1,0 +1,16 @@
+[synchronous]
+  - a write transaction to the master will be blocked until it is written to the backup / standby nodes
+    - wait for first n, or any
+[asynchronous]
+  - a write transaction is considered successful if it written to the master,
+    then asynchronously the writes are applied to backup nodes
+
+[pros]
+  - horizontal scaling
+  - region based queries - db per region
+
+[cons]
+  - eventual consistency
+  - slow writes (synchronous)
+  - complex to implement (multi master)
+

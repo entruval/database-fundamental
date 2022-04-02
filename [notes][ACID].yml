@@ -1,0 +1,92 @@
+[transaction]
+- a collection of queries strapped into one unit of work
+  - [read]
+    - when ?
+      - to generate a report and you want to get consistent snapshot based at the time of transaction
+  - [write]
+- [syntax]
+  - [begin transaction]
+    - [command]
+      - begin transaction isolation level <option>;
+    - [options]
+      - [repeatable read]
+        - begin transaction isolation level repeatable read;
+        - query inside this transaction, will not show new update that happened at the same time
+      - [serializable]
+        - begin transaction isolation level serializable;
+    - [notes]
+      - postgres apply serializable in other isolations
+  - [commit]
+  - [rollback]
+
+
+[ACID]
+
+[atomicity]
+  - is the process how the succeed or failed queries handled
+    - if one query fails, all prior successful queries in the transaction should rollback
+
+
+[isolation]
+  - is the process when a transaction happened other transaction can't interrupt with the data
+  - [read phenomena]
+    - [dirty reads]
+      - incosistent result of queries
+      - happen because of the data got changed, causing the result of the first and the second same query become different
+    - [non-repetable reads]
+      - different queries resulting in same value
+    - [phantom reads]
+      - a new row that miss to read when our query finish
+    - [lost updates]
+      - a new update that miss to read whe our query finish
+  - [isolation vs read phenomena]
+    | isolation level   | dirty reads | lost updates  | non-repeatable reads  | phantoms    |
+    | read uncommitted  | may occur   | may occur     | may occur             | may occur   |
+    | read committed    | don't occur | may occur     | may occur             | may occur   |
+    | repeatable read   | don't occur | don't occur   | may occur             | may occur   |
+    | serializable      | don't occur | don't occur   | don't occur           | don't occur |
+  - [database implementation of isolation]
+    - each dbms implements isolation level differently
+    - [pessimistic]
+      - row level locks, table locks, page locks to avoid lost update
+      - expensive process
+    - [optomistic]
+      - no locks, track if things changed and fail the transaction
+      - no sql use it
+    - [repeatable read]
+      - locks the rows it reads
+      - expensive process, when read a lot of rows
+      - postgres implements this as snapshot, so phantom reads don't occur
+    - [serializable]
+      - usually implemented with optimistic concurrency control
+      - we can implement it pessimistically, using "select for update"
+      - expensive, and very slow
+
+
+[consistency]
+  - is defined by the user
+    - the flow of write and read
+  - referential integrity
+    - using foreign key
+  - atomicity
+  - isolation
+
+
+[durability]
+  - changes made by committed transactions must be persisted in a durable non-volatile storage
+  - [durability techniques]
+    - [WAL] - Write ahead log - redis use this
+      - store data in disk
+      - writing a lot of data to disk is expensive
+        - indexes
+        - data files
+        - columns
+        - rows
+        - etc
+      - a write request in OS usually goes to the OS cache
+        - this is bad, but fast
+          - when OS crash, machine restart could lead to loss of data
+        - Fsync OS command forces writes to always go to disk
+          - expensive and slow down commits
+    - [asynchornous snapshot] - redis use this
+    - [AOF]

@@ -1,0 +1,64 @@
+[page]
+  - depending on the storage model (row vs column store), the rows are stored and read in logical pages
+  - the database doesn't read a single row, it reads a page or more in a single IO and we get a lot of rows in that IO
+  - each page has a size
+    - 8 KB in postgres
+    - 16 KB in MySQL
+  - assume each page holds 3 rows, with 1000 rows == 333 pages
+
+[IO]
+  - input / output
+  - is a read request to the disk
+  - an IO can featch 1 page or more depending on the disk partitions and other factors
+  - an io can not read a single row
+    - its a page with many rows in them
+    - you get them for free
+  - IO are expensive
+    - we need to minimize the number of IOs
+    - SELECT is expensive because of this
+  - some IOs in operating systems goes to the operating system cache and not disk
+
+[heap]
+  - is a data structure where the table is stored with all its pages one after another
+  - this is where the actual data is stored including everything
+  - traversing the heap is expensive as we need to read so many data to find what we want
+  - that is why we need indexes that help tell us exactly what part of the heap we need to read, what page or pages of the heap we need to pull
+
+[index]
+  - another data structure separate from the heap that has "pointers" to the heap
+  - it has part of the data and used to quickly search for something
+  - you can index on more than one column
+  - once a value of the index found, we fetch the data from the heap using the value
+  - index tells you exatcly which page to fetch in the heap, instead of scan every page in the heap
+  - the index is also stored as pages, and cost IO to pull the entries of the index
+  - the smaller the index, the more it can fit in memory, the faster the search
+  - add index for column that usually search
+  - [how index works]
+    - heap structure
+      - page 0
+        - 1, name
+        - 2, name
+        - 3, name
+      - page 1
+        - 4, name
+        - 5, name
+        - 6, name
+    - index structure
+      - 1(4,1) - value of the index stored inside index structure
+        - 1 == id of the index inside index structure
+        - (4,1)
+          - 4 == id of the data inside heap structure
+          - 1 == page id 
+        - search for page 1 row with id 4
+          - all of pages 1 will be returned
+          - steps count = 2
+          - unindexed data will resulting in o(n)
+      - this example is b-tree index
+  - [notes]
+    - heap is usually indexed using 'clustered index', which is using primary_key
+    - if we use uuid as primary_key it will, causing completely random heap pages, and it's very expensive process
+      - postgres only have secondary indexes, and all indexes point directly to the row_id which lives in the heap
+
+
+
+

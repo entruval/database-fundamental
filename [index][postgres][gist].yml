@@ -1,0 +1,5 @@
+[gist]
+  - generalized search tree
+  - allow a building of general tree structures
+  - good for indexing 'geometric data types' and 'full-text search'
+  

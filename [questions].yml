@@ -1,0 +1,22 @@
+1. what the cost of too much index ?
+  a. a node in index store a key and value
+  b. multi columns b-tree means bigger value size, mean bigger node size
+  c. bigger node size mean less rows stored in an IO
+  d. more IO mean slow
+2. use nosql as index structure
+3. use nosql to store partitioning index
+  a. rows / partition_size
+    1. size = (1005 / 10)
+    2. (1005 % 10) !== 0 ? size + 1 : size;
+4. which one is faster ? local disk scan vs nosql query
+5. use one connection and keep it there in the database in a class
+  - this is bad, connection are async which means concurrent query responses won't necessarily match and might be delivered to the wrong client
+  - client side locking
+    - multiple clients compete on a single connection
+6. uuid vs sequential primary keys
+  - sequential have slight delay when creating sequential
+  - uuid will have an bigger size to store (question 1)
+    - bigger size mean less rows stored in an IO
+    - less stored mean more IO, mean slower query
+  - uuid cant do range search always O(n)
+7. 

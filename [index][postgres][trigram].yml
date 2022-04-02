@@ -1,0 +1,20 @@
+[trigram]
+  - https://www.postgresql.org/docs/current/pgtrgm.html
+  - [how]
+    - SELECT * FROM <table> WHERE column <column_name> LIKE %<value>%
+    - divide value into group of three consecutive characters
+      - cat
+        - 'c', 'ca', 'cat', 'at'
+      - foo
+        - 'f', 'fo', 'foo', 'oo'
+    - measure the similary of words using divided value
+      - if column value includes all of divided value
+    - don't work for non word (non alpha numeric)
+    - don't work on string fewer than 3 characters
+  - good for text search
+    - like search
+    - etc
+  - [function]
+    - [similiarity]
+      - SELECT * FROM 
+

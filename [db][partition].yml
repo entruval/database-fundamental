@@ -1,0 +1,51 @@
+[vertical vs horizontal]
+  - horizontal partitioning splits rows into partitions
+    - range or list
+  - vertical partitioning splits columns partitions
+    - large column (blob) that you can store in a slow access drive in its own tablespace
+
+[horizontal vs sharding]
+  - horizontal splits big table into multiple tables in the same database
+    - client is agnostic
+  - sharding splits big table into multiple tables across multiple database servers
+  - horizontal is different tables
+  - sharding is different servers
+
+[types]
+ - [by range]
+  - dates, ids (e.g. by logdate or customer_id from to)
+ - [by list]
+  - discrete values (e.g. states CA, AL, etc.) or zip codes
+ - [by hash]
+  - hash functions (consistent hashing)
+
+
+[how]
+  1. create main table
+    a. create table name(columns) partition by range(column)
+    b. create table users(id serial not null, name string not null) partition by range(id)
+  2. create partition tables
+    a. create table user0035 (like users including indexes)
+      1. this will create table users 1 to 35
+    b. create table user3560 (line users including indexes)
+      1. this will create table users 36 to 60
+  3. attach values from main to partition
+    a. alter table users attach partition users0035 for values from (0) to (35);
+    b. alter table users attach partition users3560 for values from (35) to (60);
+  4. populate partition data
+    a. insert into users select * from users_org
+  5. always set enable_partition_pruning to "on"
+    a. show enable_partition_pruning
+    b. set enable_partition_pruning = on;
+
+[pros]
+  - improves query performance when accessing a single partition
+  - sequential scan vs scattered index scan
+  - easy bulk loading (attach partition)
+  - archive old data that are barely accessed into cheap storage
+
+[cons]
+  - updates that move rows from a partition to another (slow or fail sometimes), just use delete status, never delete it
+  - inefficient queries could accidently scan all partitions resulting in slower performance, fix your query
+  - schema changes can be challenging (DBMS could manage that though)
+

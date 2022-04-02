@@ -1,0 +1,3 @@
+[hash]
+  - CREATE INDEX <index_name> ON <table_name> USING HASH (<column_name>)
+  - can only use equality comparison (=)

@@ -1,0 +1,51 @@
+[how]
+  - begin
+  - declare cursor <cursor_name> for query
+  - fetch <cursor_name>
+    - this will fetch 1 row
+    - [fetch last]
+      - will fetch last row
+  - begin
+  - declare cursor user for select * from users
+  - fetch user
+    - fetchall in <cursor_name>
+  - commit
+  - close <cursor_name>
+
+  - [to check opened cursor]
+    - select * from pg_cursor
+  - [to stop]
+    - close <cursor_name>
+    - IF EXISTS(SELECT * FROM pg_cursors WHERE name = 'Crsr_IDs)
+      THEN CLOSE Crsr_IDs;
+      END IF;
+    - if cursors openend in a protected block
+      - BEGIN
+        EXCEPTION
+        WHEN END
+      - the exception handler will closes opened cursors automatically
+
+[pros]
+  - like a stream, but different in sended data size
+    - used socket connection to send data
+    - for stream, socket send data one by one
+    - for cursor, socket send data in batch
+  - low memory usage
+  - can be stop at anytime
+
+[cons]
+  - another transaction will not know other transaction cursor
+  - long transactions
+  - can be a connection blocker
+
+[server-side vs client-side cursor]
+  - unused and unclosed cursor will have a big memory usage
+  - when in client, server is light
+    - but if client have many open connections, client will have a big memory usage
+    - [alert]
+      - never do a "select *" query
+
+
+
+https://www.postgresql.org/docs/current/plpgsql-cursors.html
+

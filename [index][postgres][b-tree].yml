@@ -1,0 +1,45 @@
+[b-tree]
+  - https://www.cs.usfca.edu/~galles/visualization/BTree.html
+  - only work for serial number
+  - balanced data structure for fast traversal
+  - have nodes
+  - node can have (n) child nodes
+  - node has up to (length - 1) elements
+  - each element has a key and a value
+  - the value is usually data pointer to the row
+  - data pointer can point to primary key or tuple
+    - tuple == "index" id / page_id / row_id
+  - root node, internal node and leaf nodes
+  - a node = disk page = IO
+  - [limitation]
+    - elements in all nodes store both the key and the value
+      - multi columns index make a node have bigger size
+      - bigger size mean less row inside 1 IO
+      - more IO mean slow
+    - internal nodes take more space thus require node
+    - range queries are slow beacuse of random access ( give me all values 1 - 5)
+      - B+tree solves these problems
+  - [multi columns btree]
+    - create index id_idx on table(column) include(columns)
+      - create index id_idx on user(name) includes(id)
+    - when we select id, name from users, resulting in index only scan
+      - it will search only in index structure, because name is available in there
+    - [case study]
+      - [index scan for multi columns index]
+        - id_order_id_idx
+          - the index will use only the left index (id)
+        - where name = 'xxx'
+          - this will not use index scan
+        - [AND and OR statement]
+          - SELECT id, order id FROM orders WHERE id = 1 AND order_id = 1
+            - if id found, this will use index only scan
+            - if not found, resulting in order_id search, no index search used
+          - SELECT id, order id FROM orders WHERE id = 1 OR order_id = 1
+            - order_id search will use parallel seq scan
+          - to solve this, we need to add a order_id_idx
+            - so the query will use 2 different index scan
+
+[nodes]
+                           [4:704,5:705]
+                  [2:702]                 [7:707]
+            [1:701]     [3:703]     [6:706]     [8:708]

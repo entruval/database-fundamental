@@ -1,0 +1,23 @@
+[horizontal partition vs sharding]
+  - hp splits in the same database
+  - sharding splits across multiple database servers
+  - hp table name changes (or schema)
+  - sharding everything is the same but server changes
+
+[pros]
+  - scalability
+    - data
+    - memory
+  - security (users can access certain shards)
+  - optimal and smaller index size
+
+[cons]
+  - complex client
+  - transaction across shards problem
+  - rollbacks
+  - schema changes are hard
+  - joins
+  - has to be something you know in the query
+
+
+

@@ -1,0 +1,8 @@
+[gin]
+  - generalized inverted indexes
+  - useful for multiple values inside one column
+    - hstore
+    - array
+    - jsonb
+    - range types
+

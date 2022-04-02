@@ -1,0 +1,28 @@
+[b+tree]
+  - https://www.cs.usfca.edu/~galles/visualization/BPlusTree.html
+  - exactly like b-tree, but only stores keys in internal nodes
+  - values are only stored in leaf nodes
+  - internal nodes are smaller since they only store keys and they can fit more elements
+  - leaf nodes are "linked" (link list) so once you find a key you can find all values before and after that key
+  - great for range queries
+  - [considerations]
+    - cost of leaf pointer (cheap)
+    - 1 node fits a dbms page (most dbms)
+    - can fit internal nodes easily in memory for fast traversal, because of 1 IO can store many internal nodes
+    - leaf nodes can live in data files in the heap
+    - most dbms systems use b+tree
+  - [storage cost]
+    - b+tree secondary index values can either point directly to the tuple (postgres) or to the primary key (mysql)
+    - if the primary key data type is expensive this can cause bloat in all secondary indexes for databases sucnh MySQL (InnoDB)
+    - leaf nodes in MySQL (InnoDB) contains the full row since its an Index of Table / clustered index
+
+
+[nodes]
+
+internal nodes                                                  [5]
+internal nodes                        [3]                                                   [7,9]
+internal nodes              [2]                   [4]                   [6]                   [8]                 [10]
+                    [1:701] -> [2:702] -> [3:703] -> [4:704] -> [5:705] -> [6:800] -> [7:801] -> [8:802] -> [9:803] -> [11:805]
+
+1. find id 4 - 9
+  5 -> 3 -> 4 -> [4:704] -> [5:705] -> [6:800] -> [7:801] -> [8:802] -> [9:803]

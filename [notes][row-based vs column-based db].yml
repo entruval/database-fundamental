@@ -1,0 +1,25 @@
+[row-based]
+  - tables are stored as rows in ndisk
+  - a single block IO read to the table fetches mutliple rows with all their columns
+  - more IOs are required to find a particular row in a table scan, but once you find the row you get all columns for that row
+  - [pros]
+    - optimal for read / write
+    - OLTP
+    - efficient queries with multi columns
+  - [cons]
+    - compression isn't efficient
+    - Aggregation isn't efficiennt
+
+[column-based]
+  - tables are stored as columns first in disk
+  - a single block IO read to the table fetches multiple columns with all matching rows
+  - less IOs are required to get more values of a given column, but working with multiple columns require more IOs
+  - [pros]
+    - OLAP
+    - compress greatly
+    - amazing for aggregation
+    - good for analytics
+  - [cons]
+    - writes are slower
+    - inefficient queries with multi columns
+
