@@ -1,0 +1,8 @@
+[sp-gist]
+  - space-partitioned GIST
+  - supports partitioned search tree that facilitate the development of a wide range of different non-balanced data structures
+  - good for data that has a natural clustering element to it, and is also not an equally balanced tree
+    - gis
+    - multimedia
+    - phone routing
+    - ip routing
